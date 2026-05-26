@@ -23,6 +23,9 @@ A modern SaaS landing page built with pure HTML, CSS, and JavaScript featuring:
 
 👉 https://danishdynamic.github.io/saas-landing-page/
 
+<img width="1920" height="4368" alt="screencapture-danishdynamic-github-io-saas-landing-page-2026-05-26-11_46_16" src="https://github.com/user-attachments/assets/f69056b5-25a1-481a-9817-766de2aa7e62" />
+
+
 ---
 
 ## ✨ Features
