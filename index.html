@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowStack AI — Revenue Infrastructure for SaaS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #070b14;
+      --card: rgba(18, 25, 41, 0.8);
+      --primary: #63ffda;
+      --secondary: #7c8cff;
+      --text: #f5f7ff;
+      --muted: #9ba6c2;
+      --border: rgba(255,255,255,0.08);
+      --glow: 0 0 40px rgba(99,255,218,0.18);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(99,255,218,0.12), transparent 25%),
+        radial-gradient(circle at bottom right, rgba(124,140,255,0.15), transparent 30%);
+      z-index: -1;
+    }
+
+    .container {
+      width: min(1180px, 92%);
+      margin: auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(7,11,20,0.65);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      z-index: 999;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .logo span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      transition: 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.9rem 1.4rem;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #071018;
+      box-shadow: var(--glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      align-items: center;
+      gap: 4rem;
+      padding: 6rem 0 3rem;
+    }
+
+    .hero-content h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-content h1 span {
+      background: linear-gradient(135deg, var(--primary), #ffffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-content p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 620px;
+      margin-bottom: 2rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.2rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .stat-card h3 {
+      font-size: 1.7rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-card p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .dashboard {
+      position: relative;
+      background: linear-gradient(145deg, rgba(20,29,49,0.95), rgba(11,16,29,0.95));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .dashboard::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(99,255,218,0.12);
+      border-radius: 50%;
+      top: -120px;
+      right: -120px;
+      filter: blur(50px);
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .dashboard-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge {
+      background: rgba(99,255,218,0.12);
+      color: var(--primary);
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .chart {
+      height: 220px;
+      background: linear-gradient(to top, rgba(99,255,218,0.12), transparent);
+      border-radius: 18px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-line {
+      position: absolute;
+      inset: 0;
+    }
+
+    .chart-line svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .metric {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 18px;
+      padding: 1rem;
+    }
+
+    .metric small {
+      color: var(--muted);
+    }
+
+    .metric h4 {
+      font-size: 1.6rem;
+      margin-top: 0.3rem;
+    }
+
+    section {
+      padding: 6rem 0;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title span {
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+    }
+
+    .section-title h2 {
+      font-size: clamp(2.3rem, 5vw, 4rem);
+      letter-spacing: -0.05em;
+      margin: 0.8rem 0;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 2rem;
+      transition: 0.35s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(99,255,218,0.25);
+      box-shadow: var(--glow);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(99,255,218,0.12);
+      margin-bottom: 1.2rem;
+      font-size: 1.5rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 0.8rem;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .reviews-wrapper {
+      overflow: hidden;
+      position: relative;
+      margin-top: 3rem;
+    }
+
+    .reviews-track {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      animation: slideReviews 24s linear infinite;
+    }
+
+    @keyframes slideReviews {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .review-card {
+      width: 360px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .review-card p {
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .pricing-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 28px;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pricing-card.popular {
+      border-color: rgba(99,255,218,0.4);
+      transform: scale(1.03);
+      box-shadow: var(--glow);
+    }
+
+    .pricing-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .price {
+      font-size: 3rem;
+      font-weight: 800;
+      margin: 1rem 0;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      margin: 2rem 0;
+    }
+
+    .pricing-card li {
+      margin-bottom: 1rem;
+      color: var(--muted);
+    }
+
+    .cta {
+      text-align: center;
+      background: linear-gradient(145deg, rgba(17,25,42,0.95), rgba(8,12,22,0.95));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 36px;
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(99,255,218,0.12), transparent 60%);
+    }
+
+    .cta h2 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .cta p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    footer {
+      padding: 3rem 0;
+      text-align: center;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 6rem;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease;
+    }
+
+    .fade-up.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 3rem;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr;
+      }
+
+      .review-card {
+        width: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <div class="logo">FlowStack<span>AI</span></div>
+
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+        <a class="btn btn-primary" href="#">Start Free Trial</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero container">
+  <div class="hero-content fade-up">
+    <div class="badge">Revenue Infrastructure for SaaS Teams</div>
+
+    <h1>
+      Scale <span>pipeline growth</span>
+      with AI-powered RevOps.
+    </h1>
+
+    <p>
+      FlowStack AI helps SaaS companies optimize paid acquisition, automate attribution,
+      and increase conversion rates with modern revenue infrastructure.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#" class="btn btn-primary">Book Demo</a>
+      <a href="#features" class="btn btn-secondary">View Platform</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-card">
+        <h3>4.1x</h3>
+        <p>Average ROAS Increase</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>-42%</h3>
+        <p>Lower Cost Per Lead</p>
+      </div>
+
+      <div class="stat-card">
+        <h3>92%</h3>
+        <p>Pipeline Attribution Accuracy</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard fade-up">
+    <div class="dashboard-top">
+      <div>
+        <small style="color: var(--muted)">Revenue Dashboard</small>
+        <h3 style="margin-top:0.3rem">Live Funnel Analytics</h3>
+      </div>
+
+      <div class="badge">GA4 Synced</div>
+    </div>
+
+    <div class="chart">
+      <div class="chart-line">
+        <svg viewBox="0 0 600 220" fill="none">
+          <path d="M0 180 C100 120 120 140 200 110 C300 70 350 90 430 50 C500 20 560 40 600 10" stroke="#63ffda" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <small>Monthly Revenue</small>
+        <h4>$184K</h4>
+      </div>
+
+      <div class="metric">
+        <small>Qualified Leads</small>
+        <h4>2,418</h4>
+      </div>
+
+      <div class="metric">
+        <small>Conversion Rate</small>
+        <h4>8.2%</h4>
+      </div>
+
+      <div class="metric">
+        <small>Pipeline Velocity</small>
+        <h4>+61%</h4>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="container">
+
+    <div class="section-title fade-up">
+      <span>Platform Features</span>
+      <h2>Everything modern RevOps teams need.</h2>
+      <p>
+        From attribution pipelines to conversion optimization,
+        FlowStack AI centralizes your entire revenue system.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">📈</div>
+        <h3>Revenue Analytics</h3>
+        <p>
+          Unified dashboards tracking paid media, CRM attribution,
+          pipeline velocity, and customer acquisition.
+        </p>
+      </div>
+
+      <div class="feature-card fade-up">
+        <div class="feature-icon">⚡</div>
+        <h3>Automation Engine</h3>
+        <p>
+          Automate lead routing, lifecycle workflows,
+          and event-based CRM synchronization.
+        </p>
+      </div>
+
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🎯</div>
+        <h3>Behavioral CRO</h3>
+        <p>
+          Dynamic landing pages adapt messaging and CTAs
+          based on user search intent and funnel behavior.
+        </p>
+      </div>
+
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🔗</div>
+        <h3>GA4 Attribution</h3>
+        <p>
+          Track every meaningful conversion event from ad click
+          to revenue generation with precision.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews">
+  <div class="container">
+
+    <div class="section-title fade-up">
+      <span>Client Results</span>
+      <h2>Trusted by growth-focused SaaS teams.</h2>
+      <p>
+        Teams using FlowStack AI improved attribution clarity,
+        reduced CAC, and scaled pipeline growth.
+      </p>
+    </div>
+
+    <div class="reviews-wrapper">
+      <div class="reviews-track">
+
+        <div class="review-card">
+          <p>
+            “We reduced our cost per qualified lead by 38% within two months after implementing FlowStack AI.”
+          </p>
+
+          <div class="review-author">
+            <div class="avatar"></div>
+            <div>
+              <strong>Sarah Chen</strong>
+              <small style="display:block;color:var(--muted)">VP Growth — SaaSCore</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <p>
+            “The GA4 attribution infrastructure finally gave our RevOps team complete visibility into pipeline performance.”
+          </p>
+
+          <div class="review-author">
+            <div class="avatar"></div>
+            <div>
+              <strong>Marcus Lee</strong>
+              <small style="display:block;color:var(--muted)">Revenue Ops Lead</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <p>
+            “Dynamic landing page personalization significantly improved demo booking conversion rates.”
+          </p>
+
+          <div class="review-author">
+            <div class="avatar"></div>
+            <div>
+              <strong>Emily Torres</strong>
+              <small style="display:block;color:var(--muted)">CMO — CloudPilot</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <p>
+            “We reduced our cost per qualified lead by 38% within two months after implementing FlowStack AI.”
+          </p>
+
+          <div class="review-author">
+            <div class="avatar"></div>
+            <div>
+              <strong>Sarah Chen</strong>
+              <small style="display:block;color:var(--muted)">VP Growth — SaaSCore</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-card">
+          <p>
+            “The GA4 attribution infrastructure finally gave our RevOps team complete visibility into pipeline performance.”
+          </p>
+
+          <div class="review-author">
+            <div class="avatar"></div>
+            <div>
+              <strong>Marcus Lee</strong>
+              <small style="display:block;color:var(--muted)">Revenue Ops Lead</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="container">
+
+    <div class="section-title fade-up">
+      <span>Pricing</span>
+      <h2>Built for modern SaaS growth teams.</h2>
+      <p>
+        Flexible pricing designed for startups, scaleups, and enterprise RevOps teams.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+
+      <div class="pricing-card fade-up">
+        <h3>Starter</h3>
+        <p style="color:var(--muted)">For early-stage startups</p>
+        <div class="price">$49</div>
+
+        <ul>
+          <li>✔ Funnel Analytics</li>
+          <li>✔ GA4 Integration</li>
+          <li>✔ Landing Page Tracking</li>
+          <li>✔ Weekly Reports</li>
+        </ul>
+
+        <a href="#" class="btn btn-secondary" style="width:100%">Choose Plan</a>
+      </div>
+
+      <div class="pricing-card popular fade-up">
+        <div class="badge" style="margin-bottom:1rem;width:max-content">Most Popular</div>
+        <h3>Growth</h3>
+        <p style="color:var(--muted)">For scaling SaaS teams</p>
+        <div class="price">$149</div>
+
+        <ul>
+          <li>✔ Multi-Channel Attribution</li>
+          <li>✔ CRM Automation</li>
+          <li>✔ CRO Personalization</li>
+          <li>✔ Revenue Dashboards</li>
+          <li>✔ AI Optimization Layer</li>
+        </ul>
+
+        <a href="#" class="btn btn-primary" style="width:100%">Start Scaling</a>
+      </div>
+
+      <div class="pricing-card fade-up">
+        <h3>Enterprise</h3>
+        <p style="color:var(--muted)">Advanced RevOps infrastructure</p>
+        <div class="price">Custom</div>
+
+        <ul>
+          <li>✔ Dedicated RevOps Strategy</li>
+          <li>✔ API & Webhook Automation</li>
+          <li>✔ Pipeline Intelligence</li>
+          <li>✔ SLA & Dedicated Support</li>
+        </ul>
+
+        <a href="#" class="btn btn-secondary" style="width:100%">Book Consultation</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <div class="cta fade-up">
+      <h2>Ready to optimize your revenue pipeline?</h2>
+
+      <p>
+        Build scalable acquisition systems with modern RevOps infrastructure.
+      </p>
+
+      <a href="#" class="btn btn-primary">Schedule Strategy Call</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    © 2026 FlowStack AI — Built for modern revenue teams.
+  </div>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
